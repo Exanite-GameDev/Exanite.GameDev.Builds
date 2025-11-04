@@ -343,3 +343,31 @@ jobs:
         with:
           name: tracy-library-mac
           path: outputs/runtimes
+
+  combine-outputs:
+    runs-on: ubuntu-latest
+
+    if: always()
+    needs:
+      - vma-library-linux
+      - slang-library-linux
+      - tracy-library-linux
+      - vma-library-windows
+      - slang-library-windows
+      - tracy-library-windows
+      - vma-library-mac
+      - slang-library-mac
+      - tracy-library-mac
+
+    steps:
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: artifacts
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: combined
+          path: artifacts
