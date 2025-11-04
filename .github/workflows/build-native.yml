@@ -1,0 +1,341 @@
+name: Build Native
+
+# TODO: Use matrix strategy
+# TODO: Combine outputs into single zip
+
+on:
+  workflow_dispatch:
+
+jobs:
+  vma-library-linux:
+    runs-on: ubuntu-24.04
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-vma-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Linux Native Binaries
+          path: outputs/runtimes
+
+  slang-library-linux:
+    runs-on: ubuntu-24.04
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-slang-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Linux Native Binaries
+          path: outputs/runtimes
+
+  tracy-library-linux:
+    runs-on: ubuntu-24.04
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-tracy-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Linux Native Binaries
+          path: outputs/runtimes
+
+  vma-library-windows:
+    runs-on: windows-2025
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-vma-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Windows Native Binaries
+          path: outputs/runtimes
+
+  slang-library-windows:
+    runs-on: windows-2025
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-slang-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Windows Native Binaries
+          path: outputs/runtimes
+
+  tracy-library-windows:
+    runs-on: windows-2025
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-tracy-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Windows Native Binaries
+          path: outputs/runtimes
+
+  vma-library-mac:
+    runs-on: macos-15
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-vma-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Mac Native Binaries
+          path: outputs/runtimes
+
+  slang-library-mac:
+    runs-on: macos-15
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-slang-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Mac Native Binaries
+          path: outputs/runtimes
+
+  tracy-library-mac:
+    runs-on: macos-15
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100-rc.2.25502.107"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          repository: Exanite-GameDev/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+
+      - name: Build
+        run: |
+          dotnet run --project projects/Exanite.Engine.BuildSystem -- build-tracy-library
+
+      - uses: actions/upload-artifact@v5
+        name: Upload artifacts
+        with:
+          name: Mac Native Binaries
+          path: outputs/runtimes
