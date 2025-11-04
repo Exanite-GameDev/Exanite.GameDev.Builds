@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        output: [vma-library, slang-library, tracy-library, tracy-exe]
+        output: [vma-library, tracy-library, tracy-exe]
         os: [ubuntu-24.04, windows-2025, macos-15]
 
     name: ${{ matrix.output }} (${{ matrix.os }})
