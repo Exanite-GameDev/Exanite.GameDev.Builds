@@ -1,7 +1,6 @@
 name: Build Native
 
 # TODO: Use matrix strategy
-# TODO: Combine outputs into single zip
 # TODO: Re-enable successful jobs
 
 on:
@@ -363,8 +362,13 @@ jobs:
         with:
           path: artifacts
 
+      - name: Combine into one folder
+        run: |
+          mkdir combined
+          cp -r artifacts/*/* combined
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v5
         with:
           name: combined
-          path: artifacts
+          path: combined
