@@ -40,8 +40,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-vma-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: vma-library-linux
           path: outputs/runtimes
@@ -77,8 +77,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-slang-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: slang-library-linux
           path: outputs/runtimes
@@ -115,8 +115,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-tracy-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: tracy-library-linux
           path: outputs/runtimes
@@ -152,8 +152,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-vma-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: vma-library-windows
           path: outputs/runtimes
@@ -189,8 +189,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-slang-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: slang-library-windows
           path: outputs/runtimes
@@ -226,8 +226,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-tracy-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: tracy-library-windows
           path: outputs/runtimes
@@ -264,8 +264,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-vma-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: vma-library-mac
           path: outputs/runtimes
@@ -301,8 +301,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-slang-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: slang-library-mac
           path: outputs/runtimes
@@ -338,8 +338,8 @@ jobs:
         run: |
           dotnet run --project projects/Exanite.Engine.BuildSystem -- build-tracy-library
 
-      - uses: actions/upload-artifact@v5
-        name: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: tracy-library-mac
           path: outputs/runtimes
