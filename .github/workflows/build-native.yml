@@ -41,7 +41,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Linux Native Binaries
+          name: vma-library-linux
           path: outputs/runtimes
 
   slang-library-linux:
@@ -78,7 +78,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Linux Native Binaries
+          name: slang-library-linux
           path: outputs/runtimes
 
   tracy-library-linux:
@@ -115,7 +115,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Linux Native Binaries
+          name: tracy-library-linux
           path: outputs/runtimes
 
   vma-library-windows:
@@ -152,7 +152,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Windows Native Binaries
+          name: vma-library-windows
           path: outputs/runtimes
 
   slang-library-windows:
@@ -189,7 +189,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Windows Native Binaries
+          name: slang-library-windows
           path: outputs/runtimes
 
   tracy-library-windows:
@@ -226,7 +226,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Windows Native Binaries
+          name: tracy-library-windows
           path: outputs/runtimes
 
   vma-library-mac:
@@ -263,7 +263,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Mac Native Binaries
+          name: vma-library-mac
           path: outputs/runtimes
 
   slang-library-mac:
@@ -300,7 +300,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Mac Native Binaries
+          name: slang-library-mac
           path: outputs/runtimes
 
   tracy-library-mac:
@@ -337,5 +337,5 @@ jobs:
       - uses: actions/upload-artifact@v5
         name: Upload artifacts
         with:
-          name: Mac Native Binaries
+          name: tracy-library-mac
           path: outputs/runtimes
