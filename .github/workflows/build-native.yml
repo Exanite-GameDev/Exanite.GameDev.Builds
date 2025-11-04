@@ -10,6 +10,7 @@ jobs:
         os: [ubuntu-24.04, windows-2025, macos-15]
         output: [tracy-exe]
 
+    name: ${{ matrix.output }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
     steps:
