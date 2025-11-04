@@ -2,12 +2,14 @@ name: Build Native
 
 # TODO: Use matrix strategy
 # TODO: Combine outputs into single zip
+# TODO: Re-enable successful jobs
 
 on:
   workflow_dispatch:
 
 jobs:
   vma-library-linux:
+    if: false # Already successful
     runs-on: ubuntu-24.04
 
     steps:
@@ -82,6 +84,7 @@ jobs:
           path: outputs/runtimes
 
   tracy-library-linux:
+    if: false # Already successful
     runs-on: ubuntu-24.04
 
     steps:
@@ -230,6 +233,7 @@ jobs:
           path: outputs/runtimes
 
   vma-library-mac:
+    if: false # Already successful
     runs-on: macos-15
 
     steps:
