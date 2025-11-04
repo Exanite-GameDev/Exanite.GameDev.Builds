@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-24.04, windows-2025, macos-15]
         output: [vma-library, slang-library, tracy-library, tracy-exe]
