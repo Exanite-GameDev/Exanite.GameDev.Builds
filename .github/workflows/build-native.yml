@@ -1,4 +1,4 @@
-name: Build Native Libraries
+name: Build Native Binaries
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04, windows-2025, macos-15]
-        library: [vma, slang, tracy]
+        output: [vma-library, slang-library, tracy-library, tracy-exe]
 
     runs-on: ${{ matrix.os }}
 
@@ -37,12 +37,12 @@ jobs:
         run: dotnet build projects/Exanite.Engine.BuildSystem
 
       - name: Build
-        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- build-${{ matrix.library }}-library
+        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: ${{ matrix.library }}-${{ matrix.os }}
+          name: ${{ matrix.output }}-${{ matrix.os }}
           path: outputs/runtimes
 
   combine-outputs:
