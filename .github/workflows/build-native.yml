@@ -24,11 +24,19 @@ jobs:
     name: ${{ matrix.output }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
+    env:
+      EXANITE_BUILD_OUTPUT: submodules/Exanite.GameDev/outputs/native
+
     steps:
 
       - name: Enable long paths for Git (Windows)
         if: "runner.os == 'Windows'"
         run: git config --system core.longpaths true
+
+      - name: Setup MSVC (Windows)
+        uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: x64
 
       # We install all dependencies needed for simplicity
       - name: Setup dependencies (Linux)
@@ -81,11 +89,38 @@ jobs:
         run: dotnet run --project projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
         working-directory: submodules/Exanite.GameDev
 
+      - name: Display symbols (Windows)
+        if: "runner.os == 'Windows'"
+        shell: pwsh
+        run: |
+          foreach ($output in (Get-ChildItem -Path "${{ env.EXANITE_BUILD_OUTPUT }}" -Filter "*.dll" -Recurse)) {
+            echo "Symbols for $($output.Name):";
+            dumpbin /EXPORTS $output.FullName;
+          }
+
+      - name: Display symbols (Linux)
+        if: "runner.os == 'Linux'"
+        shell: bash
+        run: |
+          for output in $(find "${{ env.EXANITE_BUILD_OUTPUT }}" -name "*.so"); do 
+            echo "Symbols for $(basename "$output"):";
+            nm -D -g "$output"; 
+          done
+
+      - name: Display symbols (macOS)
+        if: "runner.os == 'macOS'"
+        shell: bash
+        run: |
+          for output in $(find "${{ env.EXANITE_BUILD_OUTPUT }}" -name "*.dylib"); do 
+            echo "Symbols for $(basename "$output"):";
+            nm -gU "$output"; 
+          done
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.output }}-${{ matrix.os }}
-          path: submodules/Exanite.GameDev/outputs/native
+          path: ${{ env.EXANITE_BUILD_OUTPUT }}
 
   combine-outputs:
     runs-on: ubuntu-latest
