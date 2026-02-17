@@ -19,7 +19,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .git
-          key: test-engine-mac-git-{{ hashFiles('**/.gitmodules') }}
+          key: |
+            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}-test-engine-mac
+            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}
 
       - name: Checkout repository
         uses: actions/checkout@v5.0.0

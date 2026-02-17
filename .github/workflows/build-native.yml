@@ -67,7 +67,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .git
-          key: build-native-git-{{ hashFiles('**/.gitmodules') }}
+          key: |
+            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}-build-native
+            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}
 
       - name: Checkout repository
         uses: actions/checkout@v5.0.0
