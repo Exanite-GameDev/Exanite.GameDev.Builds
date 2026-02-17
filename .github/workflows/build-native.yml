@@ -74,7 +74,7 @@ jobs:
           git submodule update --init --recursive submodules/Exanite.GameDev
 
       - name: Setup build system
-        run: dotnet build projects/Exanite.Engine.BuildSystem
+        run: dotnet build submodules/Exanite.GameDev/projects/Exanite.Engine.BuildSystem
 
       - name: Build
         run: dotnet run --project submodules/Exanite.GameDev/projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
