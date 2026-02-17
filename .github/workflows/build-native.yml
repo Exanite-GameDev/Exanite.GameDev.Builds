@@ -74,10 +74,11 @@ jobs:
           git submodule update --init --recursive submodules/Exanite.GameDev
 
       - name: Setup build system
-        run: dotnet build submodules/Exanite.GameDev/projects/Exanite.Engine.BuildSystem
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+        working-directory: submodules/Exanite.GameDev
 
       - name: Build
-        run: dotnet run --project submodules/Exanite.GameDev/projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
+        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
         working-directory: submodules/Exanite.GameDev
 
       - name: Upload artifacts
