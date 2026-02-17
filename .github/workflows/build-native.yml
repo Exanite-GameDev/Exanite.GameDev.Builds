@@ -60,14 +60,12 @@ jobs:
           path: .git
           key: git-{{ hashFiles('**/.gitmodules') }}
 
-      # Note: We handle submodules manually
       - name: Checkout repository
         uses: actions/checkout@v5.0.0
         with:
-          submodules: false
-
-      - name: Initialize Exanite.GameDev submodule
-        run: git submodule update --init --recursive submodules/Exanite.GameDev
+          token: ${{ secrets._GITHUB_TOKEN }}
+          submodules: recursive
+          lfs: false
 
       - name: Setup build system
         run: dotnet build projects/Exanite.Engine.BuildSystem
