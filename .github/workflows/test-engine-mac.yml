@@ -1,0 +1,72 @@
+name: Test engine on Mac
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test engine on Mac
+    runs-on: macos-15
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: test-engine-mac-git-{{ hashFiles('**/.gitmodules') }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          token: ${{ secrets._GITHUB_TOKEN }}
+          persist-credentials: true
+          submodules: false
+          lfs: false
+
+      - name: Initialize Exanite.GameDev submodule
+        run: |
+          git config --global url."https://x-access-token:${{ secrets._GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive submodules/Exanite.GameDev
+
+      - name: Setup build system
+        run: dotnet build projects/Exanite.Engine.BuildSystem
+        working-directory: submodules/Exanite.GameDev
+
+      - name: Build
+        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project Exanite.GraveyardClash
+        working-directory: submodules/Exanite.GameDev
+
+      - name: Run program and capture
+        run: |
+          # Run the program
+          ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/ & 
+          APP_PID=$!
+          
+          # Wait for engine to initialize
+          sleep 10
+          
+          # Screenshot entire screen
+          # -x: Suppress the shutter sound
+          # -t png: Format
+          /usr/sbin/screencapture -x -t png Screenshot.png
+          
+          # Close the program
+          kill $APP_PID
+
+      - name: Upload Screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: Screenshot
+          path: Screenshot.png
+
+      - name: Upload package
+        uses: actions/upload-artifact@v5
+        with:
+          name: Packages
+          path: submodules/Exanite.GameDev/outputs/packages
