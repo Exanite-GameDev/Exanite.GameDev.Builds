@@ -20,8 +20,8 @@ jobs:
         with:
           path: .git
           key: |
-            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}-test-engine-mac
-            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}
+            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}-test-engine-mac
+            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}
 
       - name: Checkout repository
         uses: actions/checkout@v5.0.0

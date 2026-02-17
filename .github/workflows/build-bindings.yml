@@ -23,7 +23,7 @@ jobs:
         with:
           path: .git
           key: |
-            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}-build-bindings
-            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}
+            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}-build-bindings
+            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}
 
       # TODO

@@ -68,8 +68,8 @@ jobs:
         with:
           path: .git
           key: |
-            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}-build-native
-            git-${{ runner.os }}-{{ hashFiles('**/.gitmodules') }}
+            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}-build-native
+            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}
 
       - name: Checkout repository
         uses: actions/checkout@v5.0.0
