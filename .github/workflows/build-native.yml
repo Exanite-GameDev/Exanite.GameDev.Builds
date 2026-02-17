@@ -78,6 +78,7 @@ jobs:
 
       - name: Build
         run: dotnet run --project submodules/Exanite.GameDev/projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
+        working-directory: submodules/Exanite.GameDev
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v5
