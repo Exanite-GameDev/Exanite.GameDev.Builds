@@ -36,49 +36,49 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets._GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git submodule update --init --recursive submodules/Exanite.GameDev
 
-      - name: Setup build system
-        run: dotnet build projects/Exanite.Engine.BuildSystem
-        working-directory: submodules/Exanite.GameDev
-
-      - name: Build
-        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project Exanite.GraveyardClash
-        working-directory: submodules/Exanite.GameDev
-
-      - name: Run program and capture
-        run: |
-          # Run the program
-          chmod +x ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash
-          DYLD_PRINT_LIBRARIES=1 ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash --no-crash-popup & 
-          APP_PID=$!
-          
-          # Wait for engine to initialize
-          sleep 10
-          
-          # Screenshot entire screen
-          # -x: Suppress the shutter sound
-          # -t png: Format
-          /usr/sbin/screencapture -x -t png Screenshot.png
-          
-          # Close the program
-          kill $APP_PID
-          sleep 2
-
-      - name: Upload Screenshot
-        uses: actions/upload-artifact@v4
-        with:
-          name: Screenshot
-          path: Screenshot.png
-
-      - name: Upload Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Logs
-          path: "/Users/runner/Library/Application Support/Exanite/Exanite.GraveyardClash/Logs/"
-
-      - name: Upload package
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: Packages
-          path: submodules/Exanite.GameDev/outputs/packages
+#      - name: Setup build system
+#        run: dotnet build projects/Exanite.Engine.BuildSystem
+#        working-directory: submodules/Exanite.GameDev
+#
+#      - name: Build
+#        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project Exanite.GraveyardClash
+#        working-directory: submodules/Exanite.GameDev
+#
+#      - name: Run program and capture
+#        run: |
+#          # Run the program
+#          chmod +x ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash
+#          DYLD_PRINT_LIBRARIES=1 ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash --no-crash-popup &
+#          APP_PID=$!
+#
+#          # Wait for engine to initialize
+#          sleep 10
+#
+#          # Screenshot entire screen
+#          # -x: Suppress the shutter sound
+#          # -t png: Format
+#          /usr/sbin/screencapture -x -t png Screenshot.png
+#
+#          # Close the program
+#          kill $APP_PID
+#          sleep 2
+#
+#      - name: Upload Screenshot
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: Screenshot
+#          path: Screenshot.png
+#
+#      - name: Upload Logs
+#        if: always()
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: Logs
+#          path: "/Users/runner/Library/Application Support/Exanite/Exanite.GraveyardClash/Logs/"
+#
+#      - name: Upload package
+#        if: always()
+#        uses: actions/upload-artifact@v5
+#        with:
+#          name: Packages
+#          path: submodules/Exanite.GameDev/outputs/packages
