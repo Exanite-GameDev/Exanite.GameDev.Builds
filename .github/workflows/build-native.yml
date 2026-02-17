@@ -34,6 +34,7 @@ jobs:
         run: git config --system core.longpaths true
 
       - name: Setup MSVC (Windows)
+        if: "runner.os == 'Windows'"
         uses: TheMrMilchmann/setup-msvc-dev@v4
         with:
           arch: x64
