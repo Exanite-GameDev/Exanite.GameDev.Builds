@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.output }}-${{ matrix.os }}
-          path: outputs/native
+          path: submodules/Exanite.GameDev/outputs/native
 
   combine-outputs:
     runs-on: ubuntu-latest
