@@ -1,4 +1,4 @@
-name: Build Native Binaries
+name: Build native binaries
 
 on:
   workflow_dispatch:
@@ -11,6 +11,7 @@ jobs:
         output:
           - freetype-library
           - harfbuzz-library
+          # - slang-library
           - tracy-exe
           - tracy-library
           - vma-library
@@ -58,13 +59,14 @@ jobs:
           path: .git
           key: git-{{ hashFiles('**/.gitmodules') }}
 
+      # Note: We handle submodules manually
       - name: Checkout repository
         uses: actions/checkout@v5.0.0
         with:
-          repository: Exanite-GameDev/Exanite.GameDev
-          token: ${{ secrets._GITHUB_TOKEN }}
-          submodules: recursive
-          lfs: false
+          submodules: false
+
+      - name: Initialize Exanite.GameDev submodule
+        run: git submodule update --init --recursive submodules/Exanite.GameDev
 
       - name: Setup build system
         run: dotnet build projects/Exanite.Engine.BuildSystem
