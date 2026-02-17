@@ -1,0 +1,38 @@
+name: Regenerate bindings
+
+# TODO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Regenerate bindings
+    runs-on: windows-2025}
+
+    steps:
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.100"
+
+      - name: Cache .git folder
+        uses: actions/cache@v4
+        with:
+          path: .git
+          key: git-{{ hashFiles('**/.gitmodules') }}
+
+      # Note: We handle submodules manually
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          submodules: false
+
+      - name: Initialize Exanite.GameDev submodule
+        run: git submodule update --init --recursive submodules/Exanite.GameDev
+
+      # We don't need Silk.NET's submodules
+      - name: Initialize Silk.NET submodule
+        if: ${{ github.event.inputs.regen_bindings == 'true' }}
+        run: git submodule update --init submodules/Silk.NET
