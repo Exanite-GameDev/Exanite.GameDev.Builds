@@ -1,13 +1,14 @@
-name: Regenerate bindings
+name: Build bindings
 
-# TODO
+# This workflow only builds and packs the bindings
+# Regeneration is done manually right now since I don't want to handle cross-account permissions
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    name: Regenerate bindings
+    name: Build bindings
     runs-on: windows-2025}
 
     steps:
@@ -29,10 +30,6 @@ jobs:
         with:
           submodules: false
 
-      - name: Initialize Exanite.GameDev submodule
-        run: git submodule update --init --recursive submodules/Exanite.GameDev
-
-      # We don't need Silk.NET's submodules
+      # We only need the top-level repo
       - name: Initialize Silk.NET submodule
-        if: ${{ github.event.inputs.regen_bindings == 'true' }}
         run: git submodule update --init submodules/Silk.NET
