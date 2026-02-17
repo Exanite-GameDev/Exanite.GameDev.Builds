@@ -30,6 +30,7 @@ jobs:
         if: "runner.os == 'Windows'"
         run: git config --system core.longpaths true
 
+      # We install all dependencies needed for simplicity
       - name: Setup dependencies (Linux)
         if: "runner.os == 'Linux'"
         run: |
