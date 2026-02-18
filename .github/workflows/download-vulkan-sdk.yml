@@ -28,5 +28,5 @@ jobs:
       - name: Upload installed SDK
         uses: actions/upload-artifact@v5
         with:
-          name: ${{ matrix.os }}
+          name: Vulkan SDK (${{ matrix.os }})
           path: ${{ env.VULKAN_SDK }}
