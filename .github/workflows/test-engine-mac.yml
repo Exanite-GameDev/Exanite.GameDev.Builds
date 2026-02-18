@@ -48,7 +48,7 @@ jobs:
         run: |
           # Run the program
           chmod +x ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash
-          DYLD_PRINT_LIBRARIES=1 DYLD_PRINT_SEARCHING_PATHS=1 DYLD_PRINT_RPATHS=1 ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash --no-crash-popup & 
+          DYLD_PRINT_LIBRARIES=1 DYLD_PRINT_SEARCHING_PATHS=1 DYLD_PRINT_RPATHS=1 ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash --no-crash-popup> DyldDebug.log 2>&1 &
           APP_PID=$!
           
           # Wait for engine to initialize
@@ -63,17 +63,28 @@ jobs:
           kill $APP_PID
           sleep 2
 
-      - name: Upload Screenshot
+      - name: Show DYLD logs
+        if: always()
+        run: cat DyldDebug.log
+
+      - name: Upload screenshot
         uses: actions/upload-artifact@v4
         with:
           name: Screenshot
           path: Screenshot.png
 
-      - name: Upload Logs
+      - name: Upload DYLD logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Logs
+          name: DYLD logs
+          path: DyldDebug.log
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Program logs
           path: "/Users/runner/Library/Application Support/Exanite/Exanite.GraveyardClash/Logs/"
 
       - name: Upload package
