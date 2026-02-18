@@ -44,6 +44,16 @@ jobs:
         run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project Exanite.GraveyardClash
         working-directory: submodules/Exanite.GameDev
 
+      - name: Show RPaths
+        shell: pwsh
+        run:
+          $folder = ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/
+          $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
+          foreach ($file in $files) {
+              Write-Host "RPath for $($file):"
+              otool -l $file | grep -A2 LC_RPATH || echo No RPath
+          }
+
       - name: Run program and capture
         run: |
           # Check SIP status since it can interfere with DYLD
@@ -54,10 +64,8 @@ jobs:
           export DYLD_PRINT_LIBRARIES=1
           export DYLD_PRINT_SEARCHING_PATHS=1
           export DYLD_PRINT_RPATHS=1
-          export DYLD_PRINT_APIS=1
           
           # Run the program
-          ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash
           sudo -E ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash --no-crash-popup> DyldDebug.log 2>&1 &
           APP_PID=$!
           
