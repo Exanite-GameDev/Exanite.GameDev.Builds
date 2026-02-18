@@ -47,15 +47,17 @@ jobs:
       - name: Run program and capture
         run: |
           # Check SIP status since it can interfere with DYLD
+          # Note: This should already be disabled, but I'm keeping this log here for sanity checking
           csrutil status
           
           # Enable DYLD
           export DYLD_PRINT_LIBRARIES=1
           export DYLD_PRINT_SEARCHING_PATHS=1
           export DYLD_PRINT_RPATHS=1
+          export DYLD_PRINT_APIS=1
           
           # Run the program
-          chmod +x ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash
+          ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash
           sudo -E ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash --no-crash-popup> DyldDebug.log 2>&1 &
           APP_PID=$!
           
