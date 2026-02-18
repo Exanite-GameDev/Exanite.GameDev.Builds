@@ -44,7 +44,7 @@ jobs:
         run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project Exanite.GraveyardClash
         working-directory: submodules/Exanite.GameDev
 
-      - name: Show dylib info
+      - name: Show dylib info before normalization
         shell: pwsh
         run: |
           $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
