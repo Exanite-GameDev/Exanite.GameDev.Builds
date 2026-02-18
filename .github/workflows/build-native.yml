@@ -94,7 +94,7 @@ jobs:
 
       - name: Display symbols
         shell: pwsh
-        run:
+        run: |
           $outputDirectory = "${{ env.EXANITE_BUILD_OUTPUT }}"
     
           if (-not (Test-Path $outputDirectory)) {

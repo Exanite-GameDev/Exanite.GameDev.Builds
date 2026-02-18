@@ -46,7 +46,7 @@ jobs:
 
       - name: Show RPaths
         shell: pwsh
-        run:
+        run: |
           $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
           $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
           foreach ($file in $files) {
