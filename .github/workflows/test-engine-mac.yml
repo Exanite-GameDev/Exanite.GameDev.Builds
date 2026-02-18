@@ -51,7 +51,7 @@ jobs:
           $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
           foreach ($file in $files) {
               Write-Host "RPath for $($file):"
-              otool -l $file | grep -A2 LC_RPATH || echo No RPath
+              otool -l $file | grep -A2 LC_RPATH || Write-Host "No RPath"
           }
 
       - name: Run program and capture
