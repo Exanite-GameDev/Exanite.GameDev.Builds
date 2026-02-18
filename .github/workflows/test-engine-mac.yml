@@ -54,7 +54,7 @@ jobs:
               Write-Host "Dylib info for $($file):"
           
               Write-Host
-              $installName = otool -D $file.FullName | Select-Object -Skip 1
+              $installName = otool -D $file.FullName
               Write-Host "Install name for $($file.Name):"
               Write-Host $installName
           
