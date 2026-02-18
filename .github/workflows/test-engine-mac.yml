@@ -74,7 +74,7 @@ jobs:
           $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
           $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
           foreach ($file in $files) {
-              $rpaths = otool -l $dylibPath
+              $rpaths = otool -l $file
                   | Select-String -Pattern "path (.*) \(offset \d+\)"
                   | ForEach-Object { $_.Matches.Groups[1].Value }
           
