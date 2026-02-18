@@ -68,6 +68,53 @@ jobs:
               }
           }
 
+      - name: Normalize dylib rpaths
+        shell: pwsh
+        run: |
+          $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
+          $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
+          foreach ($file in $files) {
+              $rpaths = otool -l $dylibPath
+                  | Select-String -Pattern "path (.*) \(offset \d+\)"
+                  | ForEach-Object { $_.Matches.Groups[1].Value }
+          
+              # Clear existing rpaths
+              foreach ($rpath in $rpaths) {
+                  install_name_tool -delete_rpath "$rpath" $file
+              }
+              
+              # Set rpath
+              install_name_tool -add_rpath "@loader_path" $file
+          
+              # Set install name
+              $newName = "@rpath/$($file.Name)"
+              install_name_tool -id "$newName" $file
+          }
+
+      - name: Show dylib info after normalization
+        shell: pwsh
+        run: |
+          $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
+          $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
+          foreach ($file in $files) {
+              Write-Host "----------------------------------------"
+              Write-Host "Dylib info for $($file):"
+          
+              Write-Host
+              $installName = otool -D $file.FullName
+              Write-Host "Install name for $($file.Name):"
+              Write-Host $installName
+          
+              Write-Host
+              $rpath = otool -l $file | Select-String -Pattern "LC_RPATH" -Context 1, 2
+              Write-Host "Rpath for $($file.Name):"
+              if ($rpath) {
+                  Write-Host $rpath
+              } else {
+                  Write-Host "No rpath found"
+              }
+          }
+
       - name: Run program and capture
         run: |
           # Check SIP status since it can interfere with DYLD
