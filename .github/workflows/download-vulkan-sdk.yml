@@ -1,0 +1,32 @@
+name: Download Vulkan SDK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+          - windows-2025
+          - macos-15
+
+    name: Download Vulkan SDK (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    steps:
+
+      - name: Install Vulkan SDK
+        # This is to fix: https://github.com/humbletim/install-vulkan-sdk/issues/18
+        uses: humbletim/install-vulkan-sdk@0ef43dbc8af56d77bcb1e8b1ebbbaa8718ead524
+        with:
+          version: latest
+          cache: true
+
+      - name: Upload installed SDK
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.os }}
+          path: VULKAN_SDK
