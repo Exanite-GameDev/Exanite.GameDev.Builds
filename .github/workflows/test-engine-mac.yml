@@ -126,6 +126,9 @@ jobs:
           export DYLD_PRINT_SEARCHING_PATHS=1
           export DYLD_PRINT_RPATHS=1
           
+          # Explicitly set MoltenVK path (for testing only)
+          export VK_ICD_FILENAMES="./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/MoltenVK_icd.json"
+          
           # Run the program
           ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash --no-crash-popup &
           APP_PID=$!
