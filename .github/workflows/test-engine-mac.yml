@@ -101,13 +101,6 @@ jobs:
           name: Screenshot
           path: Screenshot.png
 
-      - name: Upload DYLD logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: DYLD logs
-          path: DyldDebug.log
-
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
