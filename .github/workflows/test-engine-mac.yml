@@ -50,17 +50,22 @@ jobs:
           $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
           $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
           foreach ($file in $files) {
+              Write-Host "----------------------------------------"
               Write-Host "Dylib info for $($file):"
           
+              Write-Host
               $installName = otool -D $file.FullName | Select-Object -Skip 1
               if ($installName) {
+                  Write-Host "Install name for $($file.Name)"
                   Write-Host $installName
               } else {
                   Write-Host "No install name found"
               }
           
+              Write-Host
               $rpath = otool -l $file | Select-String -Pattern "LC_RPATH" -Context 1, 2
               if ($rpath) {
+                  Write-Host "Rpath for $($file.Name)"
                   Write-Host $rpath
               } else {
                   Write-Host "No rpath found"
