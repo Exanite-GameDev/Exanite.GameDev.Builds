@@ -44,14 +44,29 @@ jobs:
         run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project Exanite.GraveyardClash
         working-directory: submodules/Exanite.GameDev
 
-      - name: Show RPaths
+      - name: Show dylib info
         shell: pwsh
         run: |
           $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
           $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
           foreach ($file in $files) {
-              Write-Host "RPath for $($file):"
-              otool -l $file | grep -A2 LC_RPATH || Write-Host "No RPath"
+              Write-Host "Dylib info for $($file):"
+          
+              $installName = otool -D $file.FullName | Select-Object -Skip 1
+              if ($installName) {
+                  Write-Host $installName
+              } else {
+                  Write-Host "No install name found"
+              }
+          
+              $rpath = otool -l $file | Select-String -Pattern "LC_RPATH" -Context 1, 2
+              if ($rpath) {
+                  Write-Host $rpath
+              } else {
+                  Write-Host "No rpath found"
+              }
+          
+              Write-Host
           }
 
       - name: Run program and capture
