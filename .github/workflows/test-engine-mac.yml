@@ -3,6 +3,9 @@ name: Test engine on Mac
 on:
   workflow_dispatch:
 
+env:
+  EXANITE_PROJECT_NAME: Exanite.Engine.Examples
+
 jobs:
   test:
     name: Test engine on Mac
@@ -41,13 +44,13 @@ jobs:
         working-directory: submodules/Exanite.GameDev
 
       - name: Build
-        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project Exanite.GraveyardClash
+        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project ${{ env.EXANITE_PROJECT_NAME }}
         working-directory: submodules/Exanite.GameDev
 
 #      - name: Show dylib info before normalization
 #        shell: pwsh
 #        run: |
-#          $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
+#          $folder = "./submodules/Exanite.GameDev/outputs/packages"
 #          $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
 #          foreach ($file in $files) {
 #              Write-Host "----------------------------------------"
@@ -71,7 +74,7 @@ jobs:
 #      - name: Normalize dylib rpaths
 #        shell: pwsh
 #        run: |
-#          $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
+#          $folder = "./submodules/Exanite.GameDev/outputs/packages"
 #          $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
 #          foreach ($file in $files) {
 #              $rpaths = otool -l $file
@@ -94,7 +97,7 @@ jobs:
 #      - name: Show dylib info after normalization
 #        shell: pwsh
 #        run: |
-#          $folder = "./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/"
+#          $folder = "./submodules/Exanite.GameDev/outputs/packages"
 #          $files = Get-ChildItem -Path $folder -Filter *.dylib -Recurse
 #          foreach ($file in $files) {
 #              Write-Host "----------------------------------------"
@@ -117,20 +120,16 @@ jobs:
 
       - name: Run program and capture
         run: |
-          # Check SIP status since it can interfere with DYLD
-          # Note: This should already be disabled, but I'm keeping this log here for sanity checking
-          csrutil status
-          
           # Enable DYLD
           export DYLD_PRINT_LIBRARIES=1
           export DYLD_PRINT_SEARCHING_PATHS=1
           # export DYLD_PRINT_RPATHS=1
           
-          # # Explicitly set MoltenVK path (for testing only)
-          # export VK_ICD_FILENAMES="./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/MoltenVK_icd.json"
+          # Explicitly set ICD path (for testing)
+          export VK_ICD_FILENAMES="./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/MoltenVK_icd.json.disabled"
           
           # Run the program
-          ./submodules/Exanite.GameDev/outputs/packages/Exanite.GraveyardClash/Exanite.GraveyardClash_Mac.app/Contents/MacOS/Exanite.GraveyardClash --no-crash-popup &
+          ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/MacOS/${{ env.EXANITE_PROJECT_NAME }} 1 --no-crash-popup &
           APP_PID=$!
           
           # Wait for engine to initialize
@@ -156,7 +155,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Program logs
-          path: "/Users/runner/Library/Application Support/Exanite/Exanite.GraveyardClash/Logs/"
+          path: "/Users/runner/Library/Application Support/Exanite/${{ env.EXANITE_PROJECT_NAME }}/Logs/"
 
       - name: Upload package
         if: always()
