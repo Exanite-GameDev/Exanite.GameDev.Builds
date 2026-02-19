@@ -19,11 +19,77 @@ jobs:
     steps:
 
       - name: Install Vulkan SDK
-        # This is to fix: https://github.com/humbletim/install-vulkan-sdk/issues/18
-        uses: humbletim/install-vulkan-sdk@0ef43dbc8af56d77bcb1e8b1ebbbaa8718ead524
-        with:
-          version: latest
-          cache: true
+        shell: pwsh
+        run: |
+          $version = "latest"
+          $installPath = "vulkan_sdk"
+          
+          $os = switch ($true) {
+              $IsWindows { "windows" }
+              $IsLinux   { "linux" }
+              $IsMacOS   { "mac" }
+          }
+          
+          $installerDownloadExtension = switch ($true) {
+              $IsWindows { ".exe" }
+              $IsLinux   { ".tar.xz" }
+              $IsMacOS   { ".zip" }
+          }
+          
+          # The URL format seems to be flexible and just require the vulkan_sdk prefix
+          $url = "https://sdk.lunarg.com/sdk/download/$version/$os/vulkan_sdk"
+          $installerPath = "vulkan_sdk$installerDownloadExtension"
+          
+          Write-Host "Downloading from $url to $installerPath:"
+          Invoke-WebRequest -Uri $url -OutFile $installerPath
+
+          Write-Host "Installing:"
+          New-Item -Path $installPath -ItemType Directory -Force
+          switch ($true) {
+              $IsWindows {
+                  # Run the installer
+                  Start-Process -FilePath $installerPath -ArgumentList "--root", `
+                      "`"$installPath`"", `
+                      "--accept-licenses", `
+                      "--default-answer", `
+                      "--confirm-command", `
+                      "install", `
+                      "com.lunarg.vulkan.vma", `
+                      "com.lunarg.vulkan.volk", `
+                      "com.lunarg.vulkan.glm", `
+                      "com.lunarg.vulkan.debug" `
+                      -Wait
+              }
+              $IsLinux {
+                  # Simply unzip to destination
+                  # --strip-components=1 ignores the first level folder
+                  tar -xf $installerPath -C $installPath --strip-components=1
+              }
+              $IsMacOS {
+                  # Unzip first to a temporary location
+                  $unzippedInstallerPath = "unzipped_installer"
+                  Expand-Archive -Path $installerPath -DestinationPath $unzippedInstallerPath -Force
+          
+                  # Find the installer
+                  $installerExe = Get-ChildItem -Path "**/Contents/MacOS/vulkansdk-macOS" -Recurse -File | Select-Object -First 1
+          
+                  # Run the installer
+                  sudo $installerExe `
+                      --root $installPath `
+                      --accept-licenses `
+                      --default-answer `
+                      --confirm-command install `
+                      com.lunarg.vulkan.kosmic `
+                      com.lunarg.vulkan.vma `
+                      com.lunarg.vulkan.volk `
+                      com.lunarg.vulkan.glm `
+                      com.lunarg.vulkan.usr
+              }
+          }
+          
+          Write-Host "Setting env vars:"
+          "VULKAN_SDK=$installPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "$installPath/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
       - name: Upload installed SDK
         uses: actions/upload-artifact@v5
