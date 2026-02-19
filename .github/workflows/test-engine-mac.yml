@@ -130,7 +130,7 @@ jobs:
           
           # Switch to MoltenVK
           mv ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/MoltenVK_icd.json.disabled ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/MoltenVK_icd.json
-          rm ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/libkosmickrisp_icd
+          rm ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/libkosmickrisp_icd.json
           
           # Run the program
           ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/MacOS/${{ env.EXANITE_PROJECT_NAME }} 1 --no-crash-popup &
