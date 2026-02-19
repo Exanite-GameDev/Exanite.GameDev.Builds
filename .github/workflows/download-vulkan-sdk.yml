@@ -40,7 +40,7 @@ jobs:
           $url = "https://sdk.lunarg.com/sdk/download/$version/$os/vulkan_sdk"
           $installerPath = "vulkan_sdk$installerDownloadExtension"
           
-          Write-Host "Downloading from $url to $installerPath:"
+          Write-Host "Downloading from $url to $($installerPath):"
           Invoke-WebRequest -Uri $url -OutFile $installerPath
 
           Write-Host "Installing:"
