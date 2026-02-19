@@ -122,8 +122,8 @@ jobs:
           csrutil status
           
           # Enable DYLD
-          # export DYLD_PRINT_LIBRARIES=1
-          # export DYLD_PRINT_SEARCHING_PATHS=1
+          export DYLD_PRINT_LIBRARIES=1
+          export DYLD_PRINT_SEARCHING_PATHS=1
           # export DYLD_PRINT_RPATHS=1
           
           # # Explicitly set MoltenVK path (for testing only)
