@@ -121,12 +121,16 @@ jobs:
       - name: Run program and capture
         run: |
           # Enable DYLD
-          export DYLD_PRINT_LIBRARIES=1
-          export DYLD_PRINT_SEARCHING_PATHS=1
+          # export DYLD_PRINT_LIBRARIES=1
+          # export DYLD_PRINT_SEARCHING_PATHS=1
           # export DYLD_PRINT_RPATHS=1
           
           # Explicitly set ICD path (for testing)
-          export VK_ICD_FILENAMES="./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/MoltenVK_icd.json.disabled"
+          # export VK_ICD_FILENAMES="./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/MoltenVK_icd.json.disabled"
+          
+          # Switch to MoltenVK
+          mv ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/MoltenVK_icd.json.disabled ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/MoltenVK_icd.json
+          rm ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/libkosmickrisp_icd
           
           # Run the program
           ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/MacOS/${{ env.EXANITE_PROJECT_NAME }} 1 --no-crash-popup &
@@ -134,6 +138,11 @@ jobs:
           
           # Wait for engine to initialize
           sleep 10
+          
+          # Disable DYLD
+          export DYLD_PRINT_LIBRARIES=0
+          export DYLD_PRINT_SEARCHING_PATHS=0
+          export DYLD_PRINT_RPATHS=0
           
           # Screenshot entire screen
           # -x: Suppress the shutter sound
