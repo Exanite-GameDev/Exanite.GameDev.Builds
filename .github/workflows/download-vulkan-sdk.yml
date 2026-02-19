@@ -22,7 +22,7 @@ jobs:
         shell: pwsh
         run: |
           $version = "latest"
-          $installPath = "vulkan_sdk"
+          $installPath = Join-Path $pwd "vulkan_sdk"
           
           $os = switch ($true) {
               $IsWindows { "windows" }
@@ -38,27 +38,31 @@ jobs:
           
           # The URL format seems to be flexible and just require the vulkan_sdk prefix
           $url = "https://sdk.lunarg.com/sdk/download/$version/$os/vulkan_sdk"
-          $installerPath = "vulkan_sdk$installerDownloadExtension"
+          $installerPath = Join-Path $pwd "vulkan_sdk$installerDownloadExtension"
           
           Write-Host "Downloading from $url to $($installerPath):"
           Invoke-WebRequest -Uri $url -OutFile $installerPath
+          
+          Write-Host "Current directory contents:"
+          Get-ChildItem
 
           Write-Host "Installing:"
-          New-Item -Path $installPath -ItemType Directory -Force
+          New-Item -Path $installPath -ItemType Directory -Force > $null
           switch ($true) {
               $IsWindows {
                   # Run the installer
-                  Start-Process -FilePath $installerPath -ArgumentList "--root", `
-                      "`"$installPath`"", `
-                      "--accept-licenses", `
-                      "--default-answer", `
-                      "--confirm-command", `
-                      "install", `
-                      "com.lunarg.vulkan.vma", `
-                      "com.lunarg.vulkan.volk", `
-                      "com.lunarg.vulkan.glm", `
-                      "com.lunarg.vulkan.debug" `
-                      -Wait
+                  $args = @(
+                      "--root", $installPath,
+                      "--accept-licenses",
+                      "--default-answer",
+                      "--confirm-command", "install",
+                      "com.lunarg.vulkan.vma",
+                      "com.lunarg.vulkan.volk",
+                      "com.lunarg.vulkan.glm",
+                      "com.lunarg.vulkan.debug"
+                  )
+                
+                  Start-Process -FilePath $installerPath -ArgumentList $args -Wait -NoNewWindow
               }
               $IsLinux {
                   # Simply unzip to destination
@@ -71,25 +75,34 @@ jobs:
                   Expand-Archive -Path $installerPath -DestinationPath $unzippedInstallerPath -Force
           
                   # Find the installer
-                  $installerExe = Get-ChildItem -Path "**/Contents/MacOS/vulkansdk-macOS" -Recurse -File | Select-Object -First 1
+                  Install-Module -Name Glob -Scope CurrentUser -Force
+                  $installerExe = Find-GlobFile -Include "**/Contents/MacOS/vulkansdk-macOS*" . | Select-Object -First 1
           
                   # Run the installer
-                  sudo $installerExe `
-                      --root $installPath `
-                      --accept-licenses `
-                      --default-answer `
-                      --confirm-command install `
-                      com.lunarg.vulkan.kosmic `
-                      com.lunarg.vulkan.vma `
-                      com.lunarg.vulkan.volk `
-                      com.lunarg.vulkan.glm `
-                      com.lunarg.vulkan.usr
+                  chmod +x $installerExe
+          
+                  $args = @(
+                      "--root", $installPath,
+                      "--accept-licenses",
+                      "--default-answer",
+                      "--confirm-command", "install",
+                      "com.lunarg.vulkan.kosmic",
+                      "com.lunarg.vulkan.vma",
+                      "com.lunarg.vulkan.volk",
+                      "com.lunarg.vulkan.glm",
+                      "com.lunarg.vulkan.usr"
+                  )
+          
+                  sudo $installerExe $args
               }
           }
           
+          Write-Host "Current directory contents:"
+          Get-ChildItem
+          
           Write-Host "Setting env vars:"
-          "VULKAN_SDK=$installPath" | Out-File -FilePath $env:GITHUB_ENV -Append
-          "$installPath/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          Add-Content -Path $env:GITHUB_ENV -Value "VULKAN_SDK=$installPath"
+          Add-Content -Path $env:GITHUB_PATH -Value (Join-Path $installPath "bin")
 
       - name: Upload installed SDK
         uses: actions/upload-artifact@v5
