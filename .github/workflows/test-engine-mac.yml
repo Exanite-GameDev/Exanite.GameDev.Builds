@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  EXANITE_PROJECT_NAME: Exanite.Engine.Examples
+  EXANITE_PROJECT_NAME: Exanite.GraveyardClash
 
 jobs:
   test:
@@ -133,7 +133,7 @@ jobs:
           rm ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/Resources/vulkan/icd.d/libkosmickrisp_icd.json
           
           # Run the program
-          ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/MacOS/${{ env.EXANITE_PROJECT_NAME }} 1 --no-crash-popup &
+          ./submodules/Exanite.GameDev/outputs/packages/${{ env.EXANITE_PROJECT_NAME }}/${{ env.EXANITE_PROJECT_NAME }}_Mac.app/Contents/MacOS/${{ env.EXANITE_PROJECT_NAME }} --no-crash-popup &
           APP_PID=$!
           
           # Wait for engine to initialize
