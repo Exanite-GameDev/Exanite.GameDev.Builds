@@ -24,11 +24,6 @@ jobs:
     name: ${{ matrix.output }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
-    # Use Arch Linux on Linux
-    # This is because Tracy also uses Arch Linux for Github Actions
-    # Using Ubuntu leads to issues with Ubuntu's dependencies being too old
-    container: ${{ startsWith(matrix.os, 'ubuntu') && 'archlinux:base-devel' || null }}
-
     env:
       EXANITE_BUILD_OUTPUT: submodules/Exanite.GameDev/outputs/native
 
@@ -38,50 +33,11 @@ jobs:
       - name: Setup dependencies (Linux)
         if: "runner.os == 'Linux'"
         run: |
-          # Set locale
-          echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-          locale-gen
-          export LC_ALL=en_US.UTF-8
-          
-          # Initialize pacman
-          sudo pacman-key --init
-          sudo pacman-key --populate archlinux
-          pacman -Sy
-          
-          # Enable Chaotic AUR for faster installs
-          sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-          sudo pacman-key --lsign-key 3056513887B78AEB
-          
-          sudo pacman --noconfirm -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
-          sudo pacman --noconfirm -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-          
-          echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf
-          
-          # Update and install Git
-          pacman --noconfirm -Syu
-          pacman --noconfirm -S --needed git
-          
-          # Create non-root user for yay (yay cannot run as root)
-          useradd -m workflow-user
-          echo "workflow-user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-          
-          # Install yay
-          su workflow-user -c "git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin"
-          su workflow-user -c "cd /tmp/yay-bin && makepkg -si --noconfirm"
-          
-          # Exanite.Engine
-          # AUR packages: dotnet-sdk-bin powershell-bin
-          su workflow-user -c "yay --noconfirm -S dotnet-sdk-bin powershell-bin clang binutils"
-          
+          sudo apt-get update
           # harfbuzz-library
-          su workflow-user -c "yay --noconfirm -S --needed pkgconf ragel gtk-doc gcc freetype2 glib2 cairo"
-          
-          # tracy-library / tracy-exe
-          # Dependency list is verbatim from https://github.com/wolfpld/tracy/blob/master/.github/workflows/linux.yml
-          su workflow-user -c "yay --noconfirm -S --needed freetype2 debuginfod wayland dbus libxkbcommon libglvnd meson cmake git wayland-protocols nodejs lua"
-          
-          # Disable Git ownership issue check
-          git config --global --add safe.directory "*"
+          sudo apt-get install -y pkg-config ragel gtk-doc-tools gcc g++ libfreetype6-dev libglib2.0-dev libcairo2-dev
+          # tracy-exe
+          sudo apt-get install -y libglfw3-dev libfreetype-dev libcapstone-dev libdbus-1-dev libtbb-dev libgtk-3-dev debuginfod libwayland-dev libxkbcommon-dev libglvnd-dev wayland-protocols
 
       - name: Enable long paths for Git (Windows)
         if: "runner.os == 'Windows'"
@@ -102,9 +58,8 @@ jobs:
           # tracy-exe
           brew install glfw freetype capstone tbb
 
-      - name: Setup .NET (Non-Linux)
+      - name: Setup .NET
         uses: actions/setup-dotnet@v5
-        if: "runner.os != 'Linux'"
         with:
           dotnet-version: "10.0.100"
 
