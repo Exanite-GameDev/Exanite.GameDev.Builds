@@ -9,12 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         output:
-          # - freetype-library
-          # - harfbuzz-library
+          - freetype-library
+          - harfbuzz-library
           # - slang-library
           - tracy-exe
-          # - tracy-library
-          # - vma-library
+          - tracy-library
+          - vma-library
 
         os:
           - ubuntu-24.04
