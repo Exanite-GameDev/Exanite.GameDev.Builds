@@ -36,8 +36,9 @@ jobs:
       - name: Setup dependencies (Linux)
         if: "runner.os == 'Linux'"
         run: |
-          # Update
+          # Update and install Git
           pacman -Syu --noconfirm
+          pacman -S --noconfirm --needed git
           
           # Create non-root user for yay (yay cannot run as root)
           useradd -m workflow
