@@ -30,6 +30,7 @@ jobs:
     steps:
 
       # We always install all dependencies for simplicity
+      # The duplicated dependencies are intentional
       - name: Setup dependencies (Linux)
         if: "runner.os == 'Linux'"
         run: |
