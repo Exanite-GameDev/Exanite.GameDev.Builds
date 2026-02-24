@@ -200,7 +200,7 @@ jobs:
           
                           Write-Host
                           Write-Host "RPath for $($file.Name):"
-                          $rpath = readelf -d $($file.FullName) | grep -E "RPATH|RUNPATH"
+                          $rpath = readelf -d $($file.FullName) | Select-String "RPATH|RUNPATH"
                           if ($rpath) {
                               Write-Host $rpath
                           } else {
