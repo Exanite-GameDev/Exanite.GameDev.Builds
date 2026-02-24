@@ -43,42 +43,43 @@ jobs:
           
           # Initialize keyring
           sudo pacman-key --init
+          sudo pacman-key --populate archlinux
           
           # Enable Chaotic AUR for faster installs
           sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
           sudo pacman-key --lsign-key 3056513887B78AEB
           
-          sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
-          sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+          sudo pacman --noconfirm -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+          sudo pacman --noconfirm -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
           
           echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf
           
           # Update and install Git
-          pacman -Syu --noconfirm
-          pacman -S --noconfirm --needed git
+          pacman --noconfirm -Syu
+          pacman --noconfirm -S --needed git
           
           # Create non-root user for yay (yay cannot run as root)
-          useradd -m workflow
-          echo "workflow ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+          useradd -m workflow-user
+          echo "workflow-user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
           
           # Install yay
-          su workflow -c "git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin"
-          su workflow -c "cd /tmp/yay-bin && makepkg -si --noconfirm"
+          su workflow-user -c "git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin"
+          su workflow-user -c "cd /tmp/yay-bin && makepkg -si --noconfirm"
           
           # Workflow
           # This installs the AUR version of Powershell
-          su workflow -c "yay -S --noconfirm --needed powershell-bin binutils"
+          su workflow-user -c "yay --noconfirm -S --needed powershell-bin binutils"
           
           # Exanite.Engine
           # This installs the AUR version of .NET 10
-          su workflow -c "yay -S --noconfirm dotnet-sdk-bin"
+          su workflow-user -c "yay --noconfirm -S dotnet-sdk-bin"
           
           # harfbuzz-library
-          su workflow -c "yay -S --noconfirm --needed pkgconf ragel gtk-doc gcc freetype2 glib2 cairo"
+          su workflow-user -c "yay --noconfirm -S --needed pkgconf ragel gtk-doc gcc freetype2 glib2 cairo"
           
           # tracy-library / tracy-exe
           # Dependency list is verbatim from https://github.com/wolfpld/tracy/blob/master/.github/workflows/linux.yml
-          su workflow -c "yay -S --noconfirm --needed freetype2 debuginfod wayland dbus libxkbcommon libglvnd meson cmake git wayland-protocols nodejs lua"
+          su workflow-user -c "yay --noconfirm -S --needed freetype2 debuginfod wayland dbus libxkbcommon libglvnd meson cmake git wayland-protocols nodejs lua"
           
           # Disable Git ownership issue check
           git config --global --add safe.directory "*"
