@@ -228,6 +228,8 @@ jobs:
                           otool -l $($file.FullName) | grep -A 3 "LC_BUILD_VERSION"
                       }
                   }
+          
+                  Write-Host
               }
               catch {}
           }
@@ -265,6 +267,7 @@ jobs:
           foreach ($file in $files) {
               Write-Host "Showing binary information for $($file.Name):"
               file $($file.FullName)
+              Write-Host
           }
 
       - name: Upload artifacts
