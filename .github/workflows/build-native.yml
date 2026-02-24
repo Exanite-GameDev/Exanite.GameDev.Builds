@@ -59,6 +59,7 @@ jobs:
           su workflow -c "yay -S --noconfirm --needed pkgconf ragel gtk-doc gcc freetype2 glib2 cairo"
           
           # tracy-library / tracy-exe
+          # Dependency list is verbatim from https://github.com/wolfpld/tracy/blob/master/.github/workflows/linux.yml
           su workflow -c "yay -S --noconfirm --needed freetype2 debuginfod wayland dbus libxkbcommon libglvnd meson cmake git wayland-protocols nodejs lua"
           
           # Disable Git ownership issue check
