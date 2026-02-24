@@ -264,7 +264,7 @@ jobs:
           $files = Get-ChildItem -Path $folder -Filter "*" -Recurse -File
           foreach ($file in $files) {
               Write-Host "Showing binary information for $($file.Name):"
-              file $file.FullName
+              file $($file.FullName)
           }
 
       - name: Upload artifacts
