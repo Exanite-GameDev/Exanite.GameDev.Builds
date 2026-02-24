@@ -25,7 +25,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     # Use Arch Linux on Linux
-    container: ${{ runner.os == 'Linux' && 'archlinux:base-devel' || null }}
+    container: ${{ startsWith(matrix.os, 'ubuntu') && 'archlinux:base-devel' || null }}
 
     env:
       EXANITE_BUILD_OUTPUT: submodules/Exanite.GameDev/outputs/native
