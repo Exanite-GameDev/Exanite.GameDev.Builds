@@ -68,13 +68,9 @@ jobs:
           su workflow-user -c "git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin"
           su workflow-user -c "cd /tmp/yay-bin && makepkg -si --noconfirm"
           
-          # Workflow
-          # This installs the AUR version of Powershell
-          su workflow-user -c "yay --noconfirm -S --needed powershell-bin binutils"
-          
           # Exanite.Engine
-          # This installs the AUR version of .NET 10
-          su workflow-user -c "yay --noconfirm -S dotnet-sdk-bin"
+          # AUR packages: dotnet-sdk-bin powershell-bin
+          su workflow-user -c "yay --noconfirm -S dotnet-sdk-bin powershell-bin clang binutils"
           
           # harfbuzz-library
           su workflow-user -c "yay --noconfirm -S --needed pkgconf ragel gtk-doc gcc freetype2 glib2 cairo"
