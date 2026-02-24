@@ -44,21 +44,21 @@ jobs:
           echo "workflow ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
           
           # Install yay
-          su builder -c "git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin"
-          su builder -c "cd /tmp/yay-bin && makepkg -si --noconfirm"
+          su workflow -c "git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin"
+          su workflow -c "cd /tmp/yay-bin && makepkg -si --noconfirm"
           
           # Workflow
-          su builder -c "yay -S --noconfirm --needed powershell binutils"
+          su workflow -c "yay -S --noconfirm --needed powershell binutils"
           
           # Exanite.Engine
           # This installs the AUR version of .NET 10
-          su builder -c "yay -S --noconfirm dotnet-sdk-bin"
+          su workflow -c "yay -S --noconfirm dotnet-sdk-bin"
           
           # harfbuzz-library
-          su builder -c "yay -S --noconfirm --needed pkgconf ragel gtk-doc gcc freetype2 glib2 cairo"
+          su workflow -c "yay -S --noconfirm --needed pkgconf ragel gtk-doc gcc freetype2 glib2 cairo"
           
           # tracy-library / tracy-exe
-          su builder -c "yay -S --noconfirm --needed freetype2 debuginfod wayland dbus libxkbcommon libglvnd meson cmake git wayland-protocols nodejs lua"
+          su workflow -c "yay -S --noconfirm --needed freetype2 debuginfod wayland dbus libxkbcommon libglvnd meson cmake git wayland-protocols nodejs lua"
           
           # Disable Git ownership issue check
           git config --global --add safe.directory "*"
