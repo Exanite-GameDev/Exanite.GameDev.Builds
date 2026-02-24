@@ -197,5 +197,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: combined
+          name: Built binaries
           path: combined
