@@ -25,6 +25,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     # Use Arch Linux on Linux
+    # This is because Tracy also uses Arch Linux for Github Actions
+    # Using Ubuntu leads to issues with Ubuntu's dependencies being too old
     container: ${{ startsWith(matrix.os, 'ubuntu') && 'archlinux:base-devel' || null }}
 
     env:
