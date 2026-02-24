@@ -200,7 +200,12 @@ jobs:
           
                           Write-Host
                           Write-Host "RPath for $($file.Name):"
-                          readelf -d $($file.FullName) | grep -E "RPATH|RUNPATH"
+                          $rpath = readelf -d $($file.FullName) | grep -E "RPATH|RUNPATH"
+                          if ($rpath) {
+                              Write-Host $rpath
+                          } else {
+                              Write-Host "No RPath found"
+                          }
                       }
                       $IsMacOS {
                           Write-Host "Symbols for $($file.Name):"
@@ -215,12 +220,12 @@ jobs:
                           otool -D $($file.FullName)
             
                           Write-Host
-                          $rpath = otool -l $file | Select-String -Pattern "LC_RPATH" -Context 1, 2
                           Write-Host "RPath for $($file.Name):"
+                          $rpath = otool -l $file | Select-String -Pattern "LC_RPATH" -Context 1, 2
                           if ($rpath) {
                               Write-Host $rpath
                           } else {
-                              Write-Host "No rpath found"
+                              Write-Host "No RPath found"
                           }
           
                           Write-Host
