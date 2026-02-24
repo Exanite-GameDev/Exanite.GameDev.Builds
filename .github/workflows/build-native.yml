@@ -52,7 +52,7 @@ jobs:
           cd wayland
           git checkout 1.24.0
           
-          meson setup build --prefix=/usr
+          meson setup build --prefix=/usr -Ddocumentation=false -Dtests=false
           ninja -C build
           sudo ninja -C build install
 
