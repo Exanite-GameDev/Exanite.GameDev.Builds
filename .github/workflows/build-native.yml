@@ -165,8 +165,6 @@ jobs:
       - name: Display binary information
         shell: pwsh
         run: |
-          $ErrorActionPreference = "SilentlyContinue"
-          
           $outputFolder = "${{ env.EXANITE_BUILD_OUTPUT }}"
           if (-not (Test-Path $outputFolder)) {
               return
