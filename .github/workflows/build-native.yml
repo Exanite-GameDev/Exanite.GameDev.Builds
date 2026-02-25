@@ -11,7 +11,7 @@ jobs:
         output:
           - freetype-library
           - harfbuzz-library
-          # - slang-library
+          - slang-library
           - tracy-exe
           - tracy-library
           - vma-library
