@@ -116,28 +116,36 @@ jobs:
         run: dotnet run --project projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
         working-directory: submodules/Exanite.GameDev
 
-      - name: Normalize dylib rpaths
-        if: "runner.os == 'macOS'"
+      # This currently sets RPath information on Mac and Linux
+      - name: Post-process binaries
         shell: pwsh
         run: |
           $outputFolder = "${{ env.EXANITE_BUILD_OUTPUT }}"
-          $files = Get-ChildItem -Path $outputFolder -Filter *.dylib -Recurse -File
+          $files = Get-ChildItem -Path $outputFolder -Filter * -Recurse -File
           foreach ($file in $files) {
-              $rpaths = otool -l $file
-                  | Select-String -Pattern "path (.*) \(offset \d+\)"
-                  | ForEach-Object { $_.Matches.Groups[1].Value }
-
-              # Clear existing rpaths
-              foreach ($rpath in $rpaths) {
-                  install_name_tool -delete_rpath "$rpath" $file
+              switch ($true) {
+                  $IsWindows {}
+                  $IsLinux {
+                      patchelf --set-rpath "`$ORIGIN" $($file.FullName)
+                  }
+                  $IsMacOS {
+                      $rpaths = otool -l $($file.FullName) |
+                          Select-String -Pattern "path (.*) \(offset \d+\)" |
+                          ForEach-Object { $_.Matches.Groups[1].Value }
+                      
+                      # Clear existing rpaths
+                      foreach ($rpath in $rpaths) {
+                          install_name_tool -delete_rpath "$rpath" $($file.FullName)
+                      }
+                      
+                      # Set rpath
+                      install_name_tool -add_rpath "@loader_path" $($file.FullName)
+                      
+                      # Set install name
+                      $newName = "@rpath/$($file.Name)"
+                      install_name_tool -id "$newName" $($file.FullName)
+                  }
               }
-
-              # Set rpath
-              install_name_tool -add_rpath "@loader_path" $file
-
-              # Set install name
-              $newName = "@rpath/$($file.Name)"
-              install_name_tool -id "$newName" $file
           }
 
       # This helps with debugging, especially because these tools aren't cross-platform
