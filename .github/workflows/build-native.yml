@@ -170,7 +170,7 @@ jobs:
                           Write-Host "Symbols for $($file.Name):"
                           dumpbin /EXPORTS $($file.FullName)
           
-                          Write-Host
+                          Write-Host ""
                           Write-Host "Dependencies for $($file.Name):"
                           dumpbin /DEPENDENTS $($file.FullName)
                       }
@@ -178,20 +178,20 @@ jobs:
                           Write-Host "Symbols for $($file.Name):"
                           nm -D -g $($file.FullName)
               
-                          Write-Host
+                          Write-Host ""
                           Write-Host "Dependencies for $($file.Name):"
                           ldd $file.FullName
               
-                          Write-Host
+                          Write-Host ""
                           Write-Host "Required glibc version for $($file.Name):"
                           objdump -T $($file.FullName) | Select-String "GLIBC_[.\d]+" | ForEach-Object { $_.Matches.Groups[0].Value } | Sort-Object -Unique
           
-                          Write-Host
+                          Write-Host ""
                           Write-Host "Install name for $($file.Name):"
                           $soname = readelf -d libexample.so | Select-String "SONAME"
                           Write-Host $soname
           
-                          Write-Host
+                          Write-Host ""
                           Write-Host "RPath for $($file.Name):"
                           $rpath = readelf -d $($file.FullName) | Select-String "RPATH|RUNPATH"
                           if ($rpath) {
@@ -204,15 +204,15 @@ jobs:
                           Write-Host "Symbols for $($file.Name):"
                           nm -gU $($file.FullName)
           
-                          Write-Host
+                          Write-Host ""
                           Write-Host "Dependencies for $($file.Name):"
                           otool -L $($file.FullName)
           
-                          Write-Host
+                          Write-Host ""
                           Write-Host "Install name for $($file.Name):"
                           otool -D $($file.FullName)
             
-                          Write-Host
+                          Write-Host ""
                           Write-Host "RPath for $($file.Name):"
                           $rpath = otool -l $file | Select-String -Pattern "LC_RPATH" -Context 1, 2
                           if ($rpath) {
@@ -221,13 +221,13 @@ jobs:
                               Write-Host "No RPath found"
                           }
           
-                          Write-Host
+                          Write-Host ""
                           Write-Host "Required macOS version for $($file.Name):"
                           otool -l $($file.FullName) | Select-String "LC_BUILD_VERSION" -Context 0,3
                       }
                   }
           
-                  Write-Host
+                  Write-Host ""
               }
               catch {}
           }
