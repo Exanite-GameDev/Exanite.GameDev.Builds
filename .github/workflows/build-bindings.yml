@@ -18,7 +18,7 @@ jobs:
         with:
           dotnet-version: "10.0.100"
 
-      - name: Get data for caching
+      - name: Get date for caching
         id: "get-date"
         shell: pwsh
         run: |
