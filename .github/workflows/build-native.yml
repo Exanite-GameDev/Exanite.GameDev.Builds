@@ -128,7 +128,7 @@ jobs:
                       # Set RPath
                       patchelf --set-rpath "`$ORIGIN" $($file.FullName)
           
-                      # Set SOName
+                      # Set SoName
                       patchelf --set-soname "$soname" $($file.FullName)
                   }
                   $IsMacOS {
