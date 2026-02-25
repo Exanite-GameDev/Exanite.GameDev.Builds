@@ -125,7 +125,11 @@ jobs:
               switch ($true) {
                   $IsWindows {}
                   $IsLinux {
+                      # Set RPath
                       patchelf --set-rpath "`$ORIGIN" $($file.FullName)
+          
+                      # Set SOName
+                      patchelf --set-soname "$soname" $($file.FullName)
                   }
                   $IsMacOS {
                       $rpaths = otool -l $($file.FullName) |
@@ -137,7 +141,7 @@ jobs:
                           install_name_tool -delete_rpath "$rpath" $($file.FullName)
                       }
                       
-                      # Set rpath
+                      # Set RPath
                       install_name_tool -add_rpath "@loader_path" $($file.FullName)
                       
                       # Set install name
