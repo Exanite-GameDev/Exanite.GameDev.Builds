@@ -28,9 +28,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .git
-          key: |
-            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}-${{ steps.get-date.outputs.date }}-build-bindings
-            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}-${{ steps.get-date.outputs.date }}
-            git-${{ runner.os }}-${{ runner.arch }}-{{ hashFiles('**/.gitmodules') }}
+          key: git-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/.gitmodules') }}-${{ steps.get-date.outputs.date }}-build-bindings
+          restore-keys: |
+            git-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/.gitmodules') }}-${{ steps.get-date.outputs.date }}
+            git-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/.gitmodules') }}
 
       # TODO
