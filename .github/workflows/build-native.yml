@@ -129,7 +129,7 @@ jobs:
                       patchelf --set-rpath "`$ORIGIN" $($file.FullName)
           
                       # Set SoName
-                      patchelf --set-soname "$soname" $($file.FullName)
+                      patchelf --set-soname $($file.Name) $($file.FullName)
                   }
                   $IsMacOS {
                       $rpaths = otool -l $($file.FullName) |
