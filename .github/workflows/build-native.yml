@@ -107,13 +107,18 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets._GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git submodule update --init --recursive submodules/Exanite.GameDev
 
+      - name: Fetch Slang tags
+        working-directory: submodules/Exanite.GameDev/native/slang
+        run: |
+          git fetch https://github.com/shader-slang/slang.git "refs/tags/*:refs/tags/*"
+
       - name: Setup build system
-        run: dotnet build projects/Exanite.Engine.BuildSystem
         working-directory: submodules/Exanite.GameDev
+        run: dotnet build projects/Exanite.Engine.BuildSystem
 
       - name: Build
-        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
         working-directory: submodules/Exanite.GameDev
+        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
 
       # This currently sets RPath information on Mac and Linux
       - name: Post-process binaries
