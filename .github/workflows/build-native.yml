@@ -187,8 +187,8 @@ jobs:
                           objdump -T $($file.FullName) | Select-String "GLIBC_[.\d]+" | ForEach-Object { $_.Matches.Groups[0].Value } | Sort-Object -Unique
           
                           Write-Host ""
-                          Write-Host "Install name for $($file.Name):"
-                          $soname = readelf -d libexample.so | Select-String "SONAME"
+                          Write-Host "So name for $($file.Name):"
+                          $soname = readelf -d $($file.FullName) | Select-String "SONAME"
                           Write-Host $soname
           
                           Write-Host ""
