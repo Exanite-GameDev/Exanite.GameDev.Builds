@@ -36,7 +36,7 @@ jobs:
           sudo apt-get update
           
           # harfbuzz-library
-          sudo apt-get install -y ragel gtk-doc-tools
+          sudo apt-get install -y pkg-config ragel gtk-doc-tools gcc g++ libfreetype6-dev libglib2.0-dev libcairo2-dev
           
           # tracy-exe
           sudo apt-get install -y libglfw3-dev libfreetype-dev libcapstone-dev libdbus-1-dev libtbb-dev libgtk-3-dev debuginfod libwayland-dev libxkbcommon-dev libglvnd-dev wayland-protocols
@@ -71,10 +71,10 @@ jobs:
           brew update
           
           # harfbuzz-library
-          brew install ragel gtk-doc
+          brew install pkg-config ragel gtk-doc freetype glib cairo
           
           # tracy-exe
-          brew install glfw capstone tbb
+          brew install glfw freetype capstone tbb
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
