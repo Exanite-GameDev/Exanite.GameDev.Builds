@@ -11,13 +11,13 @@ jobs:
         output:
           - freetype-library
           - harfbuzz-library
-          - slang-library
-          - tracy-exe
-          - tracy-library
-          - vma-library
+#          - slang-library
+#          - tracy-exe
+#          - tracy-library
+#          - vma-library
         os:
-          - ubuntu-24.04
-          - windows-2025
+#          - ubuntu-24.04
+#          - windows-2025
           - macos-15
 
     name: ${{ matrix.output }} (${{ matrix.os }})
@@ -160,7 +160,7 @@ jobs:
         shell: pwsh
         working-directory: submodules/Exanite.GameDev/outputs/cache/cmake-ci
         run: |
-          Get-ChildItem -Recurse | Select-Object FullName
+          Get-ChildItem -Recurse | Select-Object -ExpandProperty FullName
 
       # This helps with debugging since the tools required are not cross-platform
       - name: Display binary information
