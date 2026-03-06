@@ -46,11 +46,11 @@ jobs:
           git submodule update --init --recursive submodules/Exanite.GameDev
 
       - name: Setup build system
-        run: dotnet build projects/Exanite.Engine.BuildSystem
+        run: dotnet build projects/Exanite.Engine.BuildSystem/Exanite.Engine.BuildSystem
         working-directory: submodules/Exanite.GameDev
 
       - name: Build
-        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- package --project ${{ env.EXANITE_PROJECT_NAME }}
+        run: dotnet run --project projects/Exanite.Engine.BuildSystem/Exanite.Engine.BuildSystem -- package --project ${{ env.EXANITE_PROJECT_NAME }}
         working-directory: submodules/Exanite.GameDev
 
 #      - name: Show dylib info before normalization

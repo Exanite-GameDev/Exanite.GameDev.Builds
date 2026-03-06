@@ -115,11 +115,11 @@ jobs:
 
       - name: Setup build system
         working-directory: submodules/Exanite.GameDev
-        run: dotnet build projects/Exanite.Engine.BuildSystem
+        run: dotnet build projects/Exanite.Engine.BuildSystem/Exanite.Engine.BuildSystem
 
       - name: Build
         working-directory: submodules/Exanite.GameDev
-        run: dotnet run --project projects/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
+        run: dotnet run --project projects/Exanite.Engine.BuildSystem/Exanite.Engine.BuildSystem -- build-${{ matrix.output }}
 
       # This currently sets RPath information on Mac and Linux
       - name: Post-process binaries
